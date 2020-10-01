@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
@@ -17,6 +19,17 @@
     and append the returned markup to the DOM as a child of .cards
 */
 
+let cards = document.querySelector('.cards');
+
+axios.get("https://api.github.com/users/marcsaav")
+  .then((res) => {
+    let card = cardMaker(res.data);
+    cards.append(card);
+  })
+  .catch((er) => {
+    console.log('Got an error there bud.')
+  })
+
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
     follow this link in your browser https://api.github.com/users/<Your github name>/followers,
@@ -28,7 +41,18 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ["tetondan", "dustinmyers", "justsml", "luishrd", "bigknell"];
+
+followersArray.forEach((follower) => {
+  axios.get(`https://api.github.com/users/${follower}`)
+    .then((res) => {
+      let card = cardMaker(res.data);
+      cards.append(card);
+    })
+    .catch((er) => {
+      console.log('Got an error there bud.')
+    })
+})
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,7 +73,49 @@ const followersArray = [];
       </div>
     </div>
 */
+function cardMaker(obj) {
+  let card = document.createElement('div');
+  let avatarImg = document.createElement('img');
+  let cardInfo = document.createElement('div');
+  let name = document.createElement('h3');
+  let userName = document.createElement('p');
+  let location = document.createElement('p');
+  let profile = document.createElement('p');
+  let profileURL = document.createElement('a');
+  let followers = document.createElement('p');
+  let following = document.createElement('p');
+  let bio = document.createElement('p');
 
+  card.classList.add('card');
+  cardInfo.classList.add('card-info');
+  name.classList.add('name');
+  userName.classList.add('username')
+
+  card.append(avatarImg);
+  card.append(cardInfo);
+  cardInfo.append(profileURL);
+  cardInfo.append(name);
+  cardInfo.append(userName);
+  cardInfo.append(location);
+  cardInfo.append(profile);
+  cardInfo.append(profileURL);
+  cardInfo.append(followers);
+  cardInfo.append(following);
+  cardInfo.append(bio);
+
+  avatarImg.src = obj.avatar_url;
+  name.textContent = obj.name;
+  userName.textContent = obj.login;
+  location.textContent = `Location: ${obj.location}`;
+  profile.textContent = "Profile: ";
+  profileURL.href = obj.html_url;
+  profileURL.innerHTML = "Link";
+  followers.textContent = `Followers: ${obj.followers}`;
+  following.textContent = `Following: ${obj.following}`;
+  bio.textContent = `Bio: ${obj.bio}`;
+
+  return card;
+}
 /*
   List of LS Instructors Github username's:
     tetondan
