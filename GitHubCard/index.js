@@ -93,12 +93,12 @@ function cardMaker(obj) {
 
   card.append(avatarImg);
   card.append(cardInfo);
-  cardInfo.append(profileURL);
   cardInfo.append(name);
   cardInfo.append(userName);
   cardInfo.append(location);
   cardInfo.append(profile);
-  cardInfo.append(profileURL);
+  // profile.append(profileURL);
+  // profile.innerHTML = `Profile: <a href= "${profileURL.textContent}"> ${profileURL.textContent} </a>`;
   cardInfo.append(followers);
   cardInfo.append(following);
   cardInfo.append(bio);
@@ -109,10 +109,12 @@ function cardMaker(obj) {
   location.textContent = `Location: ${obj.location}`;
   profile.textContent = "Profile: ";
   profileURL.href = obj.html_url;
-  profileURL.innerHTML = "Link";
+  profileURL.textContent = obj.html_url;
   followers.textContent = `Followers: ${obj.followers}`;
   following.textContent = `Following: ${obj.following}`;
   bio.textContent = `Bio: ${obj.bio}`;
+
+  profile.insertAdjacentElement('beforeend', profileURL)
 
   return card;
 }
